@@ -57,6 +57,12 @@ class GeometryAttribute {
     // predefined use case. Such attributes are often used for a shader specific
     // data.
     GENERIC,
+    FDC,
+    FREST,
+    OPACITY,
+    SCALE,
+    ROT,
+
 #ifdef DRACO_TRANSCODER_SUPPORTED
     // TODO(ostava): Adding a new attribute would be bit-stream change for GLTF.
     // Older decoders wouldn't know what to do with this attribute type. This

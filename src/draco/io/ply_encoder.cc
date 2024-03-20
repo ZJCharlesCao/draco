@@ -77,7 +77,16 @@ bool PlyEncoder::EncodeInternal() {
       in_point_cloud_->GetNamedAttributeId(GeometryAttribute::TEX_COORD);
   const int color_att_id =
       in_point_cloud_->GetNamedAttributeId(GeometryAttribute::COLOR);
-
+  const int fdc_att_id =
+	  in_point_cloud_->GetNamedAttributeId(GeometryAttribute::FDC);
+  const int frest_att_id =
+	  in_point_cloud_->GetNamedAttributeId(GeometryAttribute::FREST);
+  const int opa_att_id = 
+      in_point_cloud_->GetNamedAttributeId(GeometryAttribute::OPACITY);
+  const int scale_att_id =
+      in_point_cloud_->GetNamedAttributeId(GeometryAttribute::SCALE);
+  const int rot_att_id =
+	  in_point_cloud_->GetNamedAttributeId(GeometryAttribute::ROT);
   if (pos_att_id < 0) {
     return false;
   }
@@ -106,6 +115,70 @@ bool PlyEncoder::EncodeInternal() {
     out << "property " << GetAttributeDataType(normal_att_id) << " nz"
         << std::endl;
   }
+
+    // fdc attribute
+  if (fdc_att_id >= 0) {
+    const auto *const attribute = in_point_cloud_->attribute(fdc_att_id);
+    if (attribute->num_components() > 0) {
+      out << "property " << GetAttributeDataType(fdc_att_id) << " f_dc_0"
+          << std::endl;
+      out << "property " << GetAttributeDataType(fdc_att_id) << " f_dc_1"
+          << std::endl;
+      out << "property " << GetAttributeDataType(fdc_att_id) << " f_dc_2"
+          << std::endl;
+     
+    }
+  }
+
+  if (frest_att_id >= 0) {
+    const auto *const attribute = in_point_cloud_->attribute(frest_att_id);
+  //  out << "property " << GetAttributeDataType(frest_att_id) << " f_rest_0"
+		//<< std::endl;
+  //  out << "property " << GetAttributeDataType(frest_att_id) << " f_rest_1"
+		//<< std::endl;
+  //  out << "property " << GetAttributeDataType(frest_att_id) << " f_rest_2"
+  //      << std::endl;
+    // Add properties for f_rest_0 to f_rest_44
+      for (int i = 0; i < 45; ++i) {
+      out << "property " << GetAttributeDataType(frest_att_id) << " f_rest_"
+      << i << std::endl;
+      }
+  }
+  
+  if (opa_att_id >= 0) {
+	const auto *const attribute = in_point_cloud_->attribute(opa_att_id);
+	out << "property " << GetAttributeDataType(opa_att_id) << " opacity"
+		<< std::endl;
+  }
+
+  if (scale_att_id >= 0) {
+    const auto *const attribute = in_point_cloud_->attribute(scale_att_id);
+    if (attribute->num_components() > 0) {
+      out << "property " << GetAttributeDataType(fdc_att_id) << " scale_0"
+          << std::endl;
+      out << "property " << GetAttributeDataType(fdc_att_id) << " scale_1"
+          << std::endl;
+      out << "property " << GetAttributeDataType(fdc_att_id) << " scale_2"
+          << std::endl;
+    }
+  }
+
+  if (rot_att_id >= 0) {
+	const auto *const attribute = in_point_cloud_->attribute(rot_att_id);
+	if (attribute->num_components() > 0) {
+	  out << "property " << GetAttributeDataType(rot_att_id) << " rot_0"
+		  << std::endl;
+	  out << "property " << GetAttributeDataType(rot_att_id) << " rot_1"
+		  << std::endl;
+	  out << "property " << GetAttributeDataType(rot_att_id) << " rot_2"
+		  << std::endl;
+      out << "property " << GetAttributeDataType(rot_att_id) << " rot_3"
+          << std::endl;
+	}
+	
+  }
+
+
   if (color_att_id >= 0) {
     const auto *const attribute = in_point_cloud_->attribute(color_att_id);
     if (attribute->num_components() > 0) {
@@ -152,6 +225,31 @@ bool PlyEncoder::EncodeInternal() {
       const auto *const normal_att = in_point_cloud_->attribute(normal_att_id);
       buffer()->Encode(normal_att->GetAddress(normal_att->mapped_index(v)),
                        normal_att->byte_stride());
+    }
+    if (fdc_att_id >= 0) {
+      const auto *const fdc_att = in_point_cloud_->attribute(fdc_att_id);
+      buffer()->Encode(fdc_att->GetAddress(fdc_att->mapped_index(v)),
+                       fdc_att->byte_stride());
+	}
+    if (frest_att_id >= 0) {
+          const auto *const frest_att = in_point_cloud_->attribute(frest_att_id);
+      buffer()->Encode(frest_att->GetAddress(frest_att->mapped_index(v)),
+                       frest_att->byte_stride());
+    }
+    if (opa_att_id >= 0) {
+	  const auto *const opa_att = in_point_cloud_->attribute(opa_att_id);
+	  buffer()->Encode(opa_att->GetAddress(opa_att->mapped_index(v)),
+					   opa_att->byte_stride());
+	}
+    if (scale_att_id >= 0) {
+	  const auto *const scale_att = in_point_cloud_->attribute(scale_att_id);
+	  buffer()->Encode(scale_att->GetAddress(scale_att->mapped_index(v)),
+					   scale_att->byte_stride());
+	}
+    if (rot_att_id >= 0) {
+        const auto *const rot_att = in_point_cloud_->attribute(rot_att_id);
+        buffer()->Encode(rot_att->GetAddress(rot_att->mapped_index(v)),
+						 rot_att->byte_stride());
     }
     if (color_att_id >= 0) {
       const auto *const color_att = in_point_cloud_->attribute(color_att_id);

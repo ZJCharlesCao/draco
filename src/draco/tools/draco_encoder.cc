@@ -133,6 +133,62 @@ void PrintOptions(const draco::PointCloud &pc, const Options &options) {
     printf("  Normals: Skipped\n");
   }
 
+  if (pc.GetNamedAttributeId(draco::GeometryAttribute::FDC) >= 0) {
+    if (options.generic_quantization_bits == 0) {
+      printf("  FDC Generic: No quantization\n");
+    } else {
+      printf("  FDC Generic: Quantization = %d bits\n",
+             options.generic_quantization_bits);
+    }
+  } else if (options.generic_deleted) {
+    printf("  FDC Generic: Skipped\n");
+  }
+
+
+    if (pc.GetNamedAttributeId(draco::GeometryAttribute::FREST) >= 0) {
+    if (options.generic_quantization_bits == 0) {
+        printf("  FREST Generic: No quantization\n");
+    } else {
+        printf("  FREST Generic: Quantization = %d bits\n",
+                options.generic_quantization_bits);
+    }
+    } else if (options.generic_deleted) {
+    printf("  FREST Generic: Skipped\n");
+    }
+
+  if (pc.GetNamedAttributeId(draco::GeometryAttribute::OPACITY) >= 0) {
+      if (options.generic_quantization_bits == 0) {
+        printf("  OP Generic: No quantization\n");
+      } else {
+        printf("  OP Generic: Quantization = %d bits\n",
+               options.generic_quantization_bits);
+      }
+    } else if (options.generic_deleted) {
+      printf("  OP Generic: Skipped\n");
+    }
+
+if (pc.GetNamedAttributeId(draco::GeometryAttribute::SCALE) >= 0) {
+      if (options.generic_quantization_bits == 0) {
+        printf("  SCALE Generic: No quantization\n");
+      } else {
+        printf("  SCALE Generic: Quantization = %d bits\n",
+               options.generic_quantization_bits);
+      }
+    } else if (options.generic_deleted) {
+      printf("  SCALE Generic: Skipped\n");
+    }
+
+if (pc.GetNamedAttributeId(draco::GeometryAttribute::ROT) >= 0) {
+      if (options.generic_quantization_bits == 0) {
+        printf("  ROT Generic: No quantization\n");
+      } else {
+        printf("  ROT Generic: Quantization = %d bits\n",
+               options.generic_quantization_bits);
+      }
+    } else if (options.generic_deleted) {
+      printf("  ROT Generic: Skipped\n");
+    }
+
   if (pc.GetNamedAttributeId(draco::GeometryAttribute::GENERIC) >= 0) {
     if (options.generic_quantization_bits == 0) {
       printf("  Generic: No quantization\n");
@@ -143,6 +199,7 @@ void PrintOptions(const draco::PointCloud &pc, const Options &options) {
   } else if (options.generic_deleted) {
     printf("  Generic: Skipped\n");
   }
+
   printf("\n");
 }
 
@@ -354,6 +411,16 @@ int main(int argc, char **argv) {
   }
   if (options.generic_quantization_bits > 0) {
     encoder.SetAttributeQuantization(draco::GeometryAttribute::GENERIC,
+                                     options.generic_quantization_bits);
+    encoder.SetAttributeQuantization(draco::GeometryAttribute::FDC,
+                                     options.generic_quantization_bits);
+    encoder.SetAttributeQuantization(draco::GeometryAttribute::FREST,
+                                     options.generic_quantization_bits);
+    encoder.SetAttributeQuantization(draco::GeometryAttribute::OPACITY,
+        options.generic_quantization_bits);
+    encoder.SetAttributeQuantization(draco::GeometryAttribute::SCALE,
+									 options.generic_quantization_bits);
+    encoder.SetAttributeQuantization(draco::GeometryAttribute::ROT,
                                      options.generic_quantization_bits);
   }
   encoder.SetSpeedOptions(speed, speed);

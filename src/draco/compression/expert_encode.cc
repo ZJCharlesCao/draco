@@ -247,6 +247,9 @@ Status ExpertEncoder::ApplyCompressionOptions(const PointCloud &pc) {
       case GeometryAttribute::GENERIC:
         quantization_bits = compression_options.quantization_bits_generic;
         break;
+      case GeometryAttribute::FDC:
+        quantization_bits = compression_options.quantization_bits_generic;
+        break;
       default:
         break;
     }
